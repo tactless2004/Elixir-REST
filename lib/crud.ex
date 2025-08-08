@@ -1,6 +1,7 @@
 defmodule Crud do
   use GenServer
 
+  # Client
   def start_link(value) do
     GenServer.start_link(__MODULE__, value)
   end
@@ -13,7 +14,11 @@ defmodule Crud do
     GenServer.call(pid, :view)
   end
 
+  def delete(pid, key) do
+    GenServer.cast(pid, {:delete, key})
+  end
 
+  # API
   @impl true
   def init(value) do
     {:ok, {%{0 => value}, 0}}
@@ -38,6 +43,6 @@ defmodule Crud do
     {current_state, _} = state
     # reply, to_caller, new_state
     # in this context our to_caller and new_state are the same.
-    {:reply, current_state, current_state}
+    {:reply, current_state, state}
   end
 end
